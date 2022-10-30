@@ -14,7 +14,6 @@ import ru.kata.spring.boot_security.demo.validator.UserValidator;
 
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 
