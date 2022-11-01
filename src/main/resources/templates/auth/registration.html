@@ -18,6 +18,21 @@
   <input type="password" th:field="*{password}" id="password"/>
   <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
   <br/>
+  <label for="roles" >Выберите роль: </label>
+  <select th:field="*{roles}" id="roles">
+    <option th:value="'ROLE_ADMIN'" th:text="Admin"></option>
+    <option th:value="'ROLE_USER'" th:text="User"></option>
+  </select>
+  <div style="color: red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Role error</div>
+  <br/>
+  <label for="roles2" >Выбеите роль: </label>
+  <select th:field="*{roles}" id="roles2">
+    <option th:value="'ROLE_ADMIN'" th:text="Admin"></option>
+    <option th:value="'ROLE_USER'" th:text="User"></option>
+    <option th:value="''" th:text="''"></option>
+  </select>
+  <div style="color: red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Role error</div>
+  <br/>
   <input type="submit" value="Sign up!"/>
 </form>
 </body>

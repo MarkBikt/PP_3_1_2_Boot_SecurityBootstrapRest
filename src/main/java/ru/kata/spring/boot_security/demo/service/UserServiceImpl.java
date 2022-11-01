@@ -1,82 +1,75 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Transactional
     public List<User> index() {
-        return userDao.index();
+        return userRepository.findAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Transactional
     public User show(Long id) {
-        return userDao.show(id);
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void save(User user) {
-        userDao.save(user);
+        userRepository.save(user);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void update(User newUser) {
-        userDao.update(newUser);
+        userRepository.save(newUser);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void delete(Long id) { userDao.delete(id); }
+    public void delete(Long id) { userRepository.deleteById(id); }
 
     @Override
-    @Transactional(readOnly = true)
-    public User getUserByUsername(String username) {
-        return userDao.getUserByUsername(username);
-    }
-
-    @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return getUserByUsername(username);
+        Optional<User> user = userRepository.findByName(username);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("User not found!");
+        }
+        return user.get();
     }
 
     @Override
-    @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @Transactional
     public User showInfoUser(Long id) {
-        return userDao.show(id);
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
     @Transactional
     public void registration(User user) {
-        userDao.save(user);
+        userRepository.save(user);
     }
 }

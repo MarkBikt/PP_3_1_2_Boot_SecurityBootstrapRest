@@ -8,14 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.validator.UserValidator;
 
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/auth")
@@ -48,11 +45,6 @@ public class AuthController {
         if (result.hasErrors()) {
             return "/auth/registration";
         }
-
-        Set<Role> roles = new HashSet<>();
-        Role role = new Role("ROLE_USER");
-        roles.add(role);
-        user.setRoles(roles);
 
         user.setPassword(encoder.encode(user.getPassword()));
         userService.registration(user);

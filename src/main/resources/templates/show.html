@@ -9,6 +9,9 @@
 <p th:text="${user.name}">VALUE</p>
 <p th:text="${user.id}">VALUE</p>
 
+<tr th:each="role : ${user.roles}">
+  <p th:text="${role.name}">VALUE</p>
+</tr>
 <br/>
 <hr/>
 
