@@ -11,6 +11,16 @@ public class SpringBootSecurityDemoApplication {
 	}
 
 }
+//<select th:field="*{roles}" id="roles"> убрать хардкод ролей , рооли загружать с бекенда
+//
+//todo loadUserByUsername(
+// public List<User> index()
+// public User show(Long id)
+// public User showInfoUser(Long id)  - зачем тут транзакция?
+
+
+
+
 
 //@PreAuthorize("hasRole('ROLE_ADMIN')") вот это вот должно быть либо в конфигах ,
 // либо на входе в приложении . Но явно не в сервисе

@@ -24,13 +24,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public List<User> index() {
         return userRepository.findAll();
     }
 
     @Override
-    @Transactional
     public User show(Long id) {
         return userRepository.findById(id).orElse(null);
     }
@@ -52,7 +50,6 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) { userRepository.deleteById(id); }
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByName(username);
         if (user.isEmpty()) {
@@ -62,7 +59,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public User showInfoUser(Long id) {
         return userRepository.findById(id).orElse(null);
     }

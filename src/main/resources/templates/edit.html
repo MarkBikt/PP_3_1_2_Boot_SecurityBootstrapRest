@@ -19,6 +19,10 @@
   <input hidden type="text" th:field="*{password}" id="password"/>
   <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
   <br/>
+  <label>Выберите роль:</label> <br>
+  <input type="checkbox" th:field="*{roles}" th:value="ROLE_ADMIN" />Admin<br/>
+  <input type="checkbox" th:field="*{roles}" th:value="ROLE_USER" />User<br/>
+  <br/>
   <input type="submit" value="Update user"/>
 </form>
 <br/>
