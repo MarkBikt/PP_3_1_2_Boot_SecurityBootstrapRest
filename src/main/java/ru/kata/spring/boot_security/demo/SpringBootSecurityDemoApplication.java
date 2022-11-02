@@ -13,7 +13,7 @@ public class SpringBootSecurityDemoApplication {
 }
 //<select th:field="*{roles}" id="roles"> убрать хардкод ролей , рооли загружать с бекенда
 //
-//todo loadUserByUsername(
+//loadUserByUsername(
 // public List<User> index()
 // public User show(Long id)
 // public User showInfoUser(Long id)  - зачем тут транзакция?
