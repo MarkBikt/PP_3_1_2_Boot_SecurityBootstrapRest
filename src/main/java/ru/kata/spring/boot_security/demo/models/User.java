@@ -24,18 +24,28 @@ public class User implements UserDetails {
     @Column(name = "surname")
     private String surname;
 
+    @Column(name = "age")
+    private Integer age;
+
+    @NotEmpty(message = "Email not null")
+    @Size(min = 1, max = 30, message = "Email between 1 or 30")
+    @Column(name = "email")
+    private String email;
     @Column(name = "password")
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private Set<Role> roles;
 
+
     public User() {
 
     }
-    public User(String name, String surname) {
+    public User(String name, String surname, int age, String email) {
         this.name = name;
         this.surname = surname;
+        this.age = age;
+        this.email = email;
     }
 
     public Long getId() {
@@ -56,7 +66,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return getName();
+        return getEmail();
     }
 
     @Override
@@ -109,17 +119,33 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return name.equals(user.name) && surname.equals(user.surname);
+        return age == user.age && name.equals(user.name) && surname.equals(user.surname) && email.equals(user.email) && roles.equals(user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, surname);
+        return Objects.hash(name, surname, age, email, roles);
     }
 
     @Override
@@ -128,7 +154,10 @@ public class User implements UserDetails {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
+                ", age=" + age +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

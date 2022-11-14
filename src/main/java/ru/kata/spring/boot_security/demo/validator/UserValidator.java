@@ -31,7 +31,7 @@ public class UserValidator implements Validator {
             errors.rejectValue("name", "", "Выберите хотябы одну роль");
         }
         try {
-            userService.loadUserByUsername(user.getUsername());
+            userService.loadUserByUsername(user.getEmail());
         } catch (Exception ignored) {
             return;
         }
