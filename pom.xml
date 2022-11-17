@@ -12,7 +12,7 @@
 	<artifactId>spring-boot_security-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-boot_security-demo</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -52,6 +52,8 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
+
+
 	</dependencies>
 
 	<build>

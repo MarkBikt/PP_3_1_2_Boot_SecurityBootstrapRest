@@ -7,7 +7,6 @@ import org.springframework.validation.Validator;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-import javax.management.relation.RoleInfoNotFoundException;
 
 @Component
 public class UserValidator implements Validator {

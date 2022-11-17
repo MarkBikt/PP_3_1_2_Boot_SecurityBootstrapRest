@@ -1,11 +1,11 @@
 package ru.kata.spring.boot_security.demo.models;
 
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.*;
 
 @Entity
@@ -25,13 +25,15 @@ public class User implements UserDetails {
     private String surname;
 
     @Column(name = "age")
+    @Min(value = 0, message = "Age should be greater 0")
     private Integer age;
 
     @NotEmpty(message = "Email not null")
-    @Size(min = 1, max = 30, message = "Email between 1 or 30")
     @Column(name = "email")
+    @Email
     private String email;
     @Column(name = "password")
+    @NotNull(message = "Password not null")
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
