@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.validator;
+package ru.kata.spring.boot_security.demo.util.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,6 +35,6 @@ public class UserValidator implements Validator {
             return;
         }
 
-        errors.rejectValue("name", "", "Человек с таким именем пользователя существует");
+        errors.rejectValue("name", "", "Человек с таким мылом существует");
     }
 }

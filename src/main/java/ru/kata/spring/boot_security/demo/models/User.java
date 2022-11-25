@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.models;
 
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -142,7 +141,7 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return age == user.age && name.equals(user.name) && surname.equals(user.surname) && email.equals(user.email) && roles.equals(user.roles);
+        return Objects.equals(age, user.age) && name.equals(user.name) && surname.equals(user.surname) && email.equals(user.email) && roles.equals(user.roles);
     }
 
     @Override

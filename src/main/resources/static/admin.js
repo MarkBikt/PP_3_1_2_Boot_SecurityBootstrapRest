@@ -1,6 +1,4 @@
 $(document).ready(async function () {
-    //alert("My First Jquery Test");
-
     await getTableWithAdmin();
     await getTableWithUsers();
     await editUser();
@@ -80,111 +78,7 @@ async function getTableWithUsers() {
                 tableUser.append(tableFilling);
             })
         })
-}
 
-async function editUser() {
-    $('#tbody_users .eBtn').on('click', async function (event) {
-        event.preventDefault();
-        let href = $(this).attr('href');
-        let userRes;
-        await fetch(href)
-            .then(res => res.json())
-            .then(async function (user) {
-                userRes = {
-                id: $('#id_edit').val(user.id),
-                name: $('#name_edit').val(user.name),
-                surname: $('#surname_edit').val(user.surname),
-                    age: $('#age_edit').val(user.age),
-                email: $('#email_edit').val(user.email),
-                password: $('#password_edit').val(''),
-                roles: $('#role_edit').val('')
-                };
-            });
-        $('#editModal').modal();
-        const form = document.getElementById('editForm');
-        form.addEventListener('submit', async function (event) {
-            event.preventDefault();
-            const id = form.querySelector('[name="id"]'),
-                name = form.querySelector('[name="name"]'),
-                surname = form.querySelector('[name="surname"]'),
-                age = form.querySelector('[name="age"]'),
-                email = form.querySelector('[name="email"]'),
-                password = form.querySelector('[name="password"]'),
-                roles = form.querySelector('[name="roles"]')
-
-            const data = {
-                id: id.value,
-                name: name.value,
-                surname: surname.value,
-                age: age.value,
-                email: email.value,
-                password: password.value,
-                roles: [ {
-                    name: roles.value
-                } ]
-            };
-            let json = JSON.stringify(data);
-            console.log(json);
-            let response = await fetch('/admin/save', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-                body: json
-            });
-            $('#editModal').modal('hide');
-
-        });
-
-
-    });
-
-}
-
-async function createUser() {
-    /*$('.nBtn').on('click', async function(event) {
-        event.preventDefault();*/
-
-       /* $('#createButton').on('click', async function(event) {
-            event.preventDefault();*/
-            const form = document.getElementById('createForm');
-            form.addEventListener('submit', async function (event) {
-                event.preventDefault();
-                const name = form.querySelector('[name="name"]'),
-                    surname = form.querySelector('[name="surname"]'),
-                    age = form.querySelector('[name="age"]'),
-                    email = form.querySelector('[name="email"]'),
-                    password = form.querySelector('[name="password"]'),
-                    roles = form.querySelector('[name="roles"]')
-
-                const data = {
-                    name: name.value,
-                    surname: surname.value,
-                    age: age.value,
-                    email: email.value,
-                    password: password.value,
-                    roles: [ {
-                        name: roles.value
-                    } ]
-                };
-                let json = JSON.stringify(data);
-                console.log(json);
-                let response = await fetch('/admin/save', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8'
-                    },
-                    body: json
-                });
-
-            });
-
-            //window.history.back();
-        //});
-    //});
-}
-
-async function deleteUser() {
     $('#tbody_users .dBtn').on('click', async function (event) {
         event.preventDefault();
         var href = $(this).attr('href');
@@ -198,36 +92,138 @@ async function deleteUser() {
                 $('#email_delete').val(user.email);
             });
         $('#deleteModal').modal();
-        const form = document.getElementById('deleteForm');
-        form.addEventListener('submit', async function (event) {
-            event.preventDefault();
-            const id = form.querySelector('[name="id"]'),
-                name = form.querySelector('[name="name"]'),
-                surname = form.querySelector('[name="surname"]'),
-                age = form.querySelector('[name="age"]'),
-                email = form.querySelector('[name="email"]'),
-                roles = form.querySelector('[name="roles"]')
-
-            const data = {
-                id: id.value,
-                name: name.value,
-                surname: surname.value,
-                age: age.value,
-                email: email.value,
-                roles: [ {
-                    name: roles.value
-                } ]
-            };
-            let json = JSON.stringify(data);
-            console.log(json);
-            let response = await fetch('/admin/delete', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-                body: json
+    });
+    $('#tbody_users .eBtn').on('click', async function (event) {
+        event.preventDefault();
+        let href = $(this).attr('href');
+        let userRes;
+        await fetch(href)
+            .then(res => res.json())
+            .then(async function (user) {
+                userRes = {
+                    id: $('#id_edit').val(user.id),
+                    name: $('#name_edit').val(user.name),
+                    surname: $('#surname_edit').val(user.surname),
+                    age: $('#age_edit').val(user.age),
+                    email: $('#email_edit').val(user.email),
+                    password: $('#password_edit').val(''),
+                    roles: $('#role_edit').val('')
+                };
             });
-            $('#deleteModal').modal('hide');
+        $('#editModal').modal();
+    });
+}
+
+async function editUser() {
+    const form = document.getElementById('editForm');
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const id = form.querySelector('[name="id"]'),
+            name = form.querySelector('[name="name"]'),
+            surname = form.querySelector('[name="surname"]'),
+            age = form.querySelector('[name="age"]'),
+            email = form.querySelector('[name="email"]'),
+            password = form.querySelector('[name="password"]'),
+            roles = form.querySelector('[name="roles"]')
+
+        const data = {
+            id: id.value,
+            name: name.value,
+            surname: surname.value,
+            age: age.value,
+            email: email.value,
+            password: password.value,
+            roles: [{
+                name: roles.value
+            }]
+        };
+        let json = JSON.stringify(data);
+        console.log(json);
+        let response = await fetch('/admin/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: json
         });
+        if (response.ok) {
+            $('#editModal').modal('hide');
+            await getTableWithUsers();
+        }
+    });
+}
+
+async function createUser() {
+    const form = document.getElementById('createForm');
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const name = form.querySelector('[name="name"]'),
+            surname = form.querySelector('[name="surname"]'),
+            age = form.querySelector('[name="age"]'),
+            email = form.querySelector('[name="email"]'),
+            password = form.querySelector('[name="password"]'),
+            roles = form.querySelector('[name="roles"]')
+
+        const data = {
+            name: name.value,
+            surname: surname.value,
+            age: age.value,
+            email: email.value,
+            password: password.value,
+            roles: [{
+                name: roles.value
+            }]
+        };
+        let json = JSON.stringify(data);
+        console.log(json);
+        let response = await fetch('/admin/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: json
+        });
+        if (response.ok) {
+            document.getElementById("createForm").reset();
+            document.getElementById('nav-home-tab').click();
+            await getTableWithUsers();
+        }
+    });
+}
+
+async function deleteUser() {
+    const form = document.getElementById('deleteForm');
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const id = form.querySelector('[name="id"]'),
+            name = form.querySelector('[name="name"]'),
+            surname = form.querySelector('[name="surname"]'),
+            age = form.querySelector('[name="age"]'),
+            email = form.querySelector('[name="email"]'),
+            roles = form.querySelector('[name="roles"]')
+
+        const data = {
+            id: id.value,
+            name: name.value,
+            surname: surname.value,
+            age: age.value,
+            email: email.value,
+            roles: [{
+                name: roles.value
+            }]
+        };
+        let json = JSON.stringify(data);
+        console.log(json);
+        let response = await fetch('/admin/delete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: json
+        });
+        if (response.ok) {
+            $('#deleteModal').modal('hide');
+            await getTableWithUsers();
+        }
     });
 }

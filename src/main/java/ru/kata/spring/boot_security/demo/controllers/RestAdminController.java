@@ -14,7 +14,7 @@ import ru.kata.spring.boot_security.demo.util.UserErrorResponse;
 import ru.kata.spring.boot_security.demo.util.UserNotCreateOrUpdatedException;
 import ru.kata.spring.boot_security.demo.util.UserNotDeleteException;
 import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
-import ru.kata.spring.boot_security.demo.validator.UserValidator;
+import ru.kata.spring.boot_security.demo.util.validator.UserValidator;
 
 
 import javax.validation.Valid;
@@ -51,8 +51,9 @@ public class RestAdminController {
     }
 
     @PostMapping("/admin/save")
-    public ResponseEntity<HttpStatus> save(@RequestBody @Valid User user) {
-        /*if (bindingResult.hasErrors()) {
+    public ResponseEntity<HttpStatus> save(@RequestBody @Valid User user, BindingResult bindingResult) {
+        userValidator.validate(user, bindingResult);
+        if (bindingResult.hasErrors()) {
             StringBuilder errorMsg = new StringBuilder();
             List<FieldError> errors = bindingResult.getFieldErrors();
             for (FieldError error : errors) {
@@ -62,14 +63,25 @@ public class RestAdminController {
                         .append(";");
             }
             throw new UserNotCreateOrUpdatedException(errorMsg.toString());
-        }*/
+        }
         user.setPassword(encoder.encode(user.getPassword()));
         userService.save(user);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping("/admin/delete")
-    public ResponseEntity<HttpStatus> delete(@RequestBody User user) {
+    public ResponseEntity<HttpStatus> delete(@RequestBody User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            StringBuilder errorMsg = new StringBuilder();
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for (FieldError error : errors) {
+                errorMsg.append(error.getField())
+                        .append(" - ")
+                        .append(error.getDefaultMessage())
+                        .append(";");
+            }
+            throw new UserNotDeleteException(errorMsg.toString());
+        }
         userService.delete(user.getId());
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -77,7 +89,7 @@ public class RestAdminController {
     @ExceptionHandler
     private ResponseEntity<UserErrorResponse> handleException(UserNotFoundException e) {
         UserErrorResponse response = new UserErrorResponse(
-                "User with this id wasn't found!",
+                "User with this id wasn't found!" + e.getMessage(),
                 System.currentTimeMillis()
         );
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);

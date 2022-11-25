@@ -42,12 +42,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void update(User newUser) {
-        userRepository.save(newUser);
-    }
-
-    @Override
-    @Transactional
     public void delete(Long id) { userRepository.deleteById(id); }
 
     @Override
@@ -58,15 +52,8 @@ public class UserServiceImpl implements UserService {
         }
         return user.get();
     }
-
     @Override
     public User showInfoUser(Long id) {
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-    }
-
-    @Override
-    @Transactional
-    public void registration(User user) {
-        userRepository.save(user);
     }
 }
