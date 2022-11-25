@@ -60,7 +60,7 @@
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
               <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
                  role="tab" aria-controls="nav-home" aria-selected="true">User table</a>
-              <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
+              <a class="nav-link nBtn" id="nav-profile-tab" data-toggle="tab" href="#newModal"
                  role="tab" aria-controls="nav-profile" aria-selected="false">New User</a>
             </div>
           </nav>
@@ -107,41 +107,42 @@
                   </div>
                   <div class="modal-body">
                     <div class="row justify-content-center align-items-center text-center">
-                      <form th:action="@{/admin/{id}}"
-                            method="DELETE">
+                      <form id="deleteForm"
+                            method="post">
                         <div class="form-group">
                           <label for="id_delete"><b>ID</b></label>
                           <input type="text" class="form-control"
-                                 id="id_delete" value="" name="id_delete"
+                                 id="id_delete" value="" name="id"
                                  readonly/>
                         </div>
                         <div class="form-group">
                           <label for="name_delete"><b>First Name</b></label>
                           <input type="text" class="form-control" id="name_delete"
-                                 value="" name="name_delete" readonly/>
+                                 value="" name="name" readonly/>
                         </div>
                         <div class="form-group">
                           <label for="surname_delete"><b>Last Name</b></label>
                           <input type="text" class="form-control" id="surname_delete"
-                                 value="" name="surname_delete" readonly/>
+                                 value="" name="surname" readonly/>
                         </div>
                         <div class="form-group">
                           <label for="age_delete"><b>Age</b></label>
                           <input type="number" class="form-control" id="age_delete"
-                                 value="" name="age_delete" readonly/>
+                                 value="" name="age" readonly/>
                         </div>
 
                         <div class="form-group">
                           <label for="email_delete"><b>E-mail</b></label>
                           <input type="text" class="form-control" id="email_delete"
-                                 value="" name="email_delete" readonly/>
+                                 value="" name="email" readonly/>
                         </div>
                         <div class="form-group">
-                          <label for="role22">Role</label>
+                          <label for="role_delete">Role</label>
 
-                          <label for="role2"></label><select  size="2" multiple
+                          <label for="role_delete"></label><select  size="2" multiple
                                                               class="form-control"
-                                                              id="role2" readonly>
+                                                              id="role_delete"
+                                                              name="roles"      readonly>
                           <option value="ADMIN">ADMIN
                           </option>
                           <option value="USER">USER
@@ -152,7 +153,7 @@
                         <button type="button" class="btn btn-secondary"
                                 data-dismiss="modal">Close
                         </button>
-                        <button type="submit" class="btn btn-danger">Delete
+                        <button type="submit" class="btn btn-danger" id="deleteButton" >Delete
                         </button>
                       </form>
                     </div>
@@ -178,46 +179,46 @@
                   </div>
                   <div class="modal-body">
                     <div class="row justify-content-center align-items-center text-center">
-                      <form th:action="@{/admin/save}"
-                            method="PUT" >
+                      <form id="editForm"
+                            method="post" >
                         <div class="form-group">
                           <label for="id_edit"><b>ID</b></label>
                           <input type="text" class="form-control"
-                                 id="id_edit" name="id_edit" value=""
+                                 id="id_edit" name="id" value=""
                                  readonly/>
                         </div>
 
                         <div class="form-group">
                           <label for="name_edit"><b>First Name</b></label>
                           <input type="text" class="form-control" id="name_edit"
-                                 value="" name="name_edit"/>
+                                 value="" name="name"/>
                         </div>
                         <div class="form-group">
                           <label for="surname_edit"><b>Last Name</b></label>
                           <input type="text" class="form-control" id="surname_edit"
-                                 value="" name="surname_edit"/>
+                                 value="" name="surname"/>
                         </div>
                         <div class="form-group">
                           <label for="age_edit"><b>Age</b></label>
                           <input type="number" class="form-control" id="age_edit"
-                                 value="" name="age_edit"/>
+                                 value="" name="age"/>
                         </div>
                         <div class="form-group">
                           <label for="password_edit"><b>Password</b></label>
                           <input type="password" class="form-control" id="password_edit"
-                                 value="" name="password_edit"/>
+                                 value="" name="password"/>
                         </div>
                         <div class="form-group">
                           <label for="email_edit"><b>E-mail</b></label>
                           <input type="text" class="form-control" id="email_edit"
-                                 value="" name="email_edit"/>
+                                 value="" name="email"/>
                         </div>
                         <div class="form-group">
                           <label for="role_edit">Role</label>
 
                           <label for="role_edit"></label><select size="2" multiple
                                                                  class="form-control"
-                                                                 id="role_edit">
+                                                                 id="role_edit" name="roles">
                           <option value="ADMIN">ADMIN
                           </option>
                           <option value="USER">USER
@@ -239,19 +240,20 @@
             </div>
 
 
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel"
+            <div class="tab-pane fade" id="newModal" role="tabpanel"
                  aria-labelledby="nav-profile-tab">
               <div class="card">
                 <h5 class="card-header">Add new user</h5>
                 <div class="card-body text-center ">
 
-                  <form method="post" th:action="@{/admin/save}">
+                  <form method="POST" id="createForm">
                     <div class="flex-column align-items-center">
 
                       <div class="d-flex flex-column align-items-center mb-3">
                         <label for="name_save" class="font-weight-bold">First name</label>
                         <input type="text" class="form-control col-md-3"
                                id="name_save"
+                               name="name"
                                aria-label="Small" aria-describedby="inputGroup-sizing-sm"
                                placeholder="Введите имя">
                       </div>
@@ -260,6 +262,7 @@
                         <label for="surname_save" class="font-weight-bold">Last name</label>
                         <input type="text" class="form-control col-md-3"
                                id="surname_save"
+                               name="surname"
                                aria-label="Small" aria-describedby="inputGroup-sizing-sm"
                                placeholder="Введите фамилию">
                       </div>
@@ -267,6 +270,7 @@
                         <label for="age_save" class="font-weight-bold">Age</label>
                         <input type="text" class="form-control col-md-3"
                                id="age_save"
+                               name="age"
                                aria-label="Small" aria-describedby="inputGroup-sizing-sm"
                                placeholder="Введите возраст">
                       </div>
@@ -275,6 +279,7 @@
                         <label for="email_save" class="font-weight-bold">E-mail</label>
                         <input type="email" class="form-control col-md-3"
                                id="email_save"
+                               name="email"
                                aria-label="Small" aria-describedby="inputGroup-sizing-sm"
                                placeholder="Введите email">
                       </div>
@@ -283,16 +288,17 @@
                         <label for="password_save" class="font-weight-bold">Password</label>
                         <input type="password" class="form-control col-md-3"
                                id="password_save"
+                               name="password"
                                aria-label="Small" aria-describedby="inputGroup-sizing-sm"
                                placeholder="Введите пароль">
                       </div>
 
                       <div class="d-flex flex-column align-items-center mb-3">
-                        <label for="role22" class="font-weight-bold">Role</label>
+                        <label for="role_save" class="font-weight-bold">Role</label>
 
-                        <label for="role22"></label><select size="2" multiple
+                        <label for="role_save"></label><select size="2" multiple
                                                           class="form-control col-md-3"
-                                                          id="role22">
+                                                          id="role_save" name="roles">
                         <option value="ADMIN">ADMIN
                         </option>
                         <option value="USER">USER
@@ -301,7 +307,7 @@
                       </div>
 
                       <div class="form-group">
-                        <button type="submit" class="btn btn-success">Add new user</button>
+                        <button type="submit" class="btn btn-success" id="createButton">Add new user</button>
                       </div>
                     </div>
                   </form>

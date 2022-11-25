@@ -10,7 +10,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
-import ru.kata.spring.boot_security.demo.util.PersonNotUpdatedException;
+import ru.kata.spring.boot_security.demo.util.UserErrorResponse;
+import ru.kata.spring.boot_security.demo.util.UserNotCreateOrUpdatedException;
+import ru.kata.spring.boot_security.demo.util.UserNotDeleteException;
+import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 import ru.kata.spring.boot_security.demo.validator.UserValidator;
 
 
@@ -19,6 +22,7 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping
 public class RestAdminController {
     private final UserService userService;
     private final UserValidator userValidator;
@@ -36,56 +40,63 @@ public class RestAdminController {
     public List<User> index() {
         return userService.index();
     }
-
-    @GetMapping("admin/new")
-    public User newUser() {
-        return new User();
-    }
     @GetMapping("/admin/auth")
     public User authUser(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return userService.showInfoUser(user.getId());
     }
-
     @GetMapping("/admin/findOne")
     public User findOne(Long id) {
         return userService.show(id);
     }
 
-    /*@PostMapping("/admin/save")
-    public String create(@Valid User user, BindingResult bindingResult) {
-
-        userValidator.validate(user, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            return "index";
-        }
-
-        user.setPassword(encoder.encode(user.getPassword()));
-        userService.save(user);
-        return "redirect:/admin";
-    }
-
-    @PostMapping("/admin")
-    public ResponseEntity<HttpStatus> update(@Valid User user) {
-        if (bindingResult.hasErrors()) {
+    @PostMapping("/admin/save")
+    public ResponseEntity<HttpStatus> save(@RequestBody @Valid User user) {
+        /*if (bindingResult.hasErrors()) {
             StringBuilder errorMsg = new StringBuilder();
             List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : errors) {
-                errorMsg.append(fieldError.getField()).append(" - ").append(fieldError.getDefaultMessage()).append(";");
+            for (FieldError error : errors) {
+                errorMsg.append(error.getField())
+                        .append(" - ")
+                        .append(error.getDefaultMessage())
+                        .append(";");
             }
-            throw new PersonNotUpdatedException(errorMsg.toString());
-        }
-
+            throw new UserNotCreateOrUpdatedException(errorMsg.toString());
+        }*/
         user.setPassword(encoder.encode(user.getPassword()));
-        userService.update(user);
+        userService.save(user);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @PostMapping("/admin/delete")
+    public ResponseEntity<HttpStatus> delete(@RequestBody User user) {
+        userService.delete(user.getId());
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 
-    @DeleteMapping("admin/{id}")
-    public String delete(@PathVariable("id") Long id) {
-        userService.delete(id);
-        return "redirect:/admin";
-    }*/
+    @ExceptionHandler
+    private ResponseEntity<UserErrorResponse> handleException(UserNotFoundException e) {
+        UserErrorResponse response = new UserErrorResponse(
+                "User with this id wasn't found!",
+                System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<UserErrorResponse> handleException(UserNotCreateOrUpdatedException e) {
+        UserErrorResponse response = new UserErrorResponse(
+                e.getMessage(),
+                System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler
+    private ResponseEntity<UserErrorResponse> handleException(UserNotDeleteException e) {
+        UserErrorResponse response = new UserErrorResponse(
+                e.getMessage(),
+                System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }
