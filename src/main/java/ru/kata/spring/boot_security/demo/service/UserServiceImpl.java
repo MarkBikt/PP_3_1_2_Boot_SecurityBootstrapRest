@@ -25,12 +25,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> index() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public User show(Long id) {
+    public User getUser(Long id) {
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 

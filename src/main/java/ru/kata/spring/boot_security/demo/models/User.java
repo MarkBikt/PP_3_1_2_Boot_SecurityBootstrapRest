@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.models;
 
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -35,7 +36,10 @@ public class User implements UserDetails {
     @NotNull(message = "Password not null")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id"))
     private Set<Role> roles;
 
 

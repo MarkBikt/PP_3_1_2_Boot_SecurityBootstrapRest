@@ -12,8 +12,9 @@ const userFetchAdminService = {
         'Content-Type': 'application/json',
         'Referer': null
     },
-    findUser: async () => await fetch('admin/auth'),
-    findAllUsers: async () => await fetch('admin/index'),
+    findUser: async () => await fetch('api/auth'),
+    findAllUsers: async () => await fetch('api/users'),
+    findAllRoles: async () => await fetch('api/roles')
 }
 
 async function getTableWithAdmin() {
@@ -62,13 +63,13 @@ async function getTableWithUsers() {
                                 ${user.roles.map(role => role.name).join(' ')}
                             </td> 
                             <td>
-                            <button href="/admin/findOne/?id=${user.id}"
+                            <button href="/api/findOne/?id=${user.id}"
                                 type="button"
                                 class="btn btn-info eBtn"
                                 data-toggle="modal">Edit</button>
                             </td>    
                             <td>
-                             <button href="/admin/findOne/?id=${user.id}"
+                             <button href="/api/findOne/?id=${user.id}"
                                 type="button"
                                 class="btn btn-danger dBtn"
                                 data-toggle="modal">Delete</button>
@@ -82,6 +83,19 @@ async function getTableWithUsers() {
     $('#tbody_users .dBtn').on('click', async function (event) {
         event.preventDefault();
         var href = $(this).attr('href');
+        let sel = $('#role_delete');
+        sel.empty();
+        await userFetchAdminService.findAllRoles()
+            .then(res => res.json())
+            .then(roles => {
+                for (let i = 0; i < 2; i++) {
+                    let opt = `$(
+                         <option value=${roles[i].name}>${roles[i].name}
+                        </option>
+                    )`;
+                    sel.append(opt);
+                }
+            });
         await fetch(href)
             .then(res => res.json())
             .then(async function (user) {
@@ -93,10 +107,25 @@ async function getTableWithUsers() {
             });
         $('#deleteModal').modal();
     });
+
+
     $('#tbody_users .eBtn').on('click', async function (event) {
         event.preventDefault();
         let href = $(this).attr('href');
         let userRes;
+        let sel = $('#role_edit');
+        sel.empty();
+        await userFetchAdminService.findAllRoles()
+            .then(res => res.json())
+            .then(roles => {
+                for (let i = 0; i < 2; i++) {
+                    let opt = `$(
+                         <option value=${roles[i].name}>${roles[i].name}
+                        </option>
+                    )`;
+                    sel.append(opt);
+                }
+            });
         await fetch(href)
             .then(res => res.json())
             .then(async function (user) {
@@ -112,6 +141,23 @@ async function getTableWithUsers() {
             });
         $('#editModal').modal();
     });
+
+    $('#nav-profile-tab').on('click', async(event) => {
+        event.preventDefault();
+        let sel = $('#role_save');
+        sel.empty();
+        await userFetchAdminService.findAllRoles()
+            .then(res => res.json())
+            .then(roles => {
+                for (let i = 0; i < 2; i++) {
+                    let opt = `$(
+                         <option value=${roles[i].name}>${roles[i].name}
+                        </option>
+                    )`;
+                    sel.append(opt);
+                }
+            });
+    })
 }
 
 async function editUser() {
@@ -124,7 +170,7 @@ async function editUser() {
             age = form.querySelector('[name="age"]'),
             email = form.querySelector('[name="email"]'),
             password = form.querySelector('[name="password"]'),
-            roles = form.querySelector('[name="roles"]')
+            roles = form.querySelector('[name="roles"]');
 
         const data = {
             id: id.value,
@@ -139,7 +185,7 @@ async function editUser() {
         };
         let json = JSON.stringify(data);
         console.log(json);
-        let response = await fetch('/admin/save', {
+        let response = await fetch('/api/save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -176,7 +222,7 @@ async function createUser() {
         };
         let json = JSON.stringify(data);
         console.log(json);
-        let response = await fetch('/admin/save', {
+        let response = await fetch('/api/save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -214,7 +260,7 @@ async function deleteUser() {
         };
         let json = JSON.stringify(data);
         console.log(json);
-        let response = await fetch('/admin/delete', {
+        let response = await fetch('/api/delete', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'

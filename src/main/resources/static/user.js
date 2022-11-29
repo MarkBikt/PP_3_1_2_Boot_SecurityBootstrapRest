@@ -1,6 +1,4 @@
 $(document).ready(async function () {
-    alert("My First Jquery Test");
-
     await getTableWithUser();
 
 });
@@ -11,7 +9,7 @@ const userFetchService = {
         'Content-Type': 'application/json',
         'Referer': null
     },
-    findUser: async () => await fetch('user/auth'),
+    findUser: async () => await fetch('api/auth'),
 }
 
 async function getTableWithUser() {
@@ -38,23 +36,3 @@ async function getTableWithUser() {
                 table.append(tableFilling);
         })
     }
-
-
-
-
-/*await fetch("http://localhost:8080/user/auth")
-    .then(res => res.json())
-    .then(function (data) {
-        $('#nav_email').html(data.email);
-
-        $('#id').html(data.id);
-        $('#name').html(data.name);
-        $('#surname').html(data.surname);
-        $('#age').html(data.age);
-        $('#email').html(data.email);
-
-        for (let i = 0; i < data.roles.length; i++) {
-            $('#roles').html(data.roles[i].name);
-            $('#nav_roles').html(data.roles[i].name);
-        }
-    });*/
