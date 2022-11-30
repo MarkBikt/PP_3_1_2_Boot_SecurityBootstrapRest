@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
@@ -18,10 +19,12 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder) {
         this.userRepository = userRepository;
+        this.encoder = encoder;
     }
 
     @Override
@@ -37,6 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void save(User user) {
+        user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -44,14 +48,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void delete(Long id) { userRepository.deleteById(id); }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(username);
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User not found!");
-        }
-        return user.get();
-    }
+
     @Override
     public User showInfoUser(Long id) {
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);

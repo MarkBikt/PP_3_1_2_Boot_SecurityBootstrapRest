@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.service.UserDetailServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 
@@ -12,10 +13,12 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 public class UserValidator implements Validator {
 
     private final UserService userService;
+    private final UserDetailServiceImpl userDetailService;
 
     @Autowired
-    public UserValidator(UserService userService) {
+    public UserValidator(UserService userService, UserDetailServiceImpl userDetailService) {
         this.userService = userService;
+        this.userDetailService = userDetailService;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class UserValidator implements Validator {
             errors.rejectValue("name", "", "Выберите хотябы одну роль");
         }
         try {
-            userService.loadUserByUsername(user.getEmail());
+            userDetailService.loadUserByUsername(user.getEmail());
         } catch (Exception ignored) {
             return;
         }

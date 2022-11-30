@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.kata.spring.boot_security.demo.service.UserDetailServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Configuration
@@ -17,17 +18,16 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
-
-    private final UserService userService;
+    private final UserDetailServiceImpl userDetailService;
     @Autowired
-    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserService userService) {
+    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserDetailServiceImpl userDetailService) {
         this.successUserHandler = successUserHandler;
-        this.userService = userService;
+        this.userDetailService = userDetailService;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(getPasswordEncoder());
+        auth.userDetailsService(userDetailService).passwordEncoder(getPasswordEncoder());
     }
 
     @Override

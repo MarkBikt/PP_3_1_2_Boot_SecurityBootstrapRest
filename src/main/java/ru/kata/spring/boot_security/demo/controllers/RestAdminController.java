@@ -26,14 +26,12 @@ import java.util.List;
 public class RestAdminController {
     private final UserService userService;
     private final UserValidator userValidator;
-    private final PasswordEncoder encoder;
     private final RoleService roleService;
 
     @Autowired
     public RestAdminController(UserService userService, UserValidator userValidator, PasswordEncoder encoder, RoleService roleService) {
         this.userService = userService;
         this.userValidator = userValidator;
-        this.encoder = encoder;
         this.roleService = roleService;
     }
 
@@ -70,7 +68,6 @@ public class RestAdminController {
             }
             throw new UserNotCreateOrUpdatedException(errorMsg.toString());
         }
-        user.setPassword(encoder.encode(user.getPassword()));
         userService.save(user);
         return ResponseEntity.ok(HttpStatus.OK);
     }
