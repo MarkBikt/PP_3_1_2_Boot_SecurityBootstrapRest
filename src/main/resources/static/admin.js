@@ -47,7 +47,6 @@ async function getTableWithAdmin() {
 async function getTableWithUsers() {
     let tableUser = $('#tbody_users');
     tableUser.empty();
-
     await userFetchAdminService.findAllUsers()
         .then(res => res.json())
         .then(users => {
@@ -169,9 +168,9 @@ async function editUser() {
             surname = form.querySelector('[name="surname"]'),
             age = form.querySelector('[name="age"]'),
             email = form.querySelector('[name="email"]'),
-            password = form.querySelector('[name="password"]'),
-            roles = form.querySelector('[name="roles"]');
-
+            password = form.querySelector('[name="password"]');
+            //roles = form.querySelector('[name="roles"]');
+            let role = $('#role_edit').val();
         const data = {
             id: id.value,
             name: name.value,
@@ -179,9 +178,7 @@ async function editUser() {
             age: age.value,
             email: email.value,
             password: password.value,
-            roles: [{
-                name: roles.value
-            }]
+            roles: role
         };
         let json = JSON.stringify(data);
         console.log(json);
@@ -207,8 +204,9 @@ async function createUser() {
             surname = form.querySelector('[name="surname"]'),
             age = form.querySelector('[name="age"]'),
             email = form.querySelector('[name="email"]'),
-            password = form.querySelector('[name="password"]'),
-            roles = form.querySelector('[name="roles"]')
+            password = form.querySelector('[name="password"]');
+            //roles = form.querySelector('[name="roles"]')
+            let role = $('#role_save').val();
 
         const data = {
             name: name.value,
@@ -216,9 +214,7 @@ async function createUser() {
             age: age.value,
             email: email.value,
             password: password.value,
-            roles: [{
-                name: roles.value
-            }]
+            roles: role
         };
         let json = JSON.stringify(data);
         console.log(json);

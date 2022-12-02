@@ -18,6 +18,7 @@ import ru.kata.spring.boot_security.demo.util.validator.UserValidator;
 
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 

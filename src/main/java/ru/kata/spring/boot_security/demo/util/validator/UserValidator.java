@@ -38,6 +38,6 @@ public class UserValidator implements Validator {
             return;
         }
 
-        errors.rejectValue("name", "", "Человек с таким мылом существует");
+        errors.rejectValue("email", "", "Человек с таким мылом существует");
     }
 }
